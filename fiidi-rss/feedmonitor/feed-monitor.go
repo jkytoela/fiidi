@@ -37,9 +37,9 @@ func NewMonitor(feedUrls []string, refresh time.Duration) *FeedMonitor {
 func (fm *FeedMonitor) Start() {
 	ticker := time.NewTicker(time.Duration(fm.Refresh))
 	defer ticker.Stop()
-	for range ticker.C { // TODO: Change to for range
+	for range ticker.C {
 		for _, feedURL := range fm.FeedUrls {
-			go fm.processFeed(feedURL)
+			fm.processFeed(feedURL)
 		}
 	}
 }

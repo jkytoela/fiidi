@@ -9,3 +9,53 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  api:
+    image: node:latest
+    build:
+      context: fiidi-api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: fiididb
+      NODE_ENV: development
+    volumes:
+      # Maps our current project directory `.` to
+      # our working directory in the container
+      # - ./:/usr/src/app/
+      - /usr/src/app/
+      # node_modules workaround for volumes
+      # https://stackoverflow.com/a/32785014
+      - /usr/src/app/node_modules
+    depends_on:
+      - fiididb
+      - rabbitmq
+
+  fiididb:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5433:5433"
+    environment:
+      - PGPORT=5433
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fiididb
+    volumes:
+      - fiididb-data:/var/lib/postgresql/data
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "16543:80"
+    depends_on:
+      - fiididb
+
+volumes:
+  fiididb-data:
