@@ -11,6 +11,7 @@ services:
       - "15672:15672"
 
   api:
+    container_name: fiidi_api
     image: node:latest
     build:
       context: fiidi-api
@@ -23,16 +24,11 @@ services:
       DB_HOST: fiididb
       NODE_ENV: development
     volumes:
-      # Maps our current project directory `.` to
-      # our working directory in the container
-      # - ./:/usr/src/app/
-      - /usr/src/app/
-      # node_modules workaround for volumes
-      # https://stackoverflow.com/a/32785014
-      - /usr/src/app/node_modules
+      - ./fiidi-api/:/usr/src/app/
+      - ignore:/usr/src/app/scripts/
     depends_on:
-      - fiididb
       - rabbitmq
+      - fiididb
 
   fiididb:
     image: postgres:latest
@@ -46,6 +42,11 @@ services:
       - POSTGRES_DB=fiididb
     volumes:
       - fiididb-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   pgadmin-compose:
     image: dpage/pgadmin4
@@ -59,3 +60,4 @@ services:
 
 volumes:
   fiididb-data:
+  ignore:

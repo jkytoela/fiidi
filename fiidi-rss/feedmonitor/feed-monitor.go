@@ -10,9 +10,9 @@ import (
 const MaxHistoryLength = 150
 
 type Item struct {
-	Title      string
-	Link       string
-	Categories []string
+	Title      string   `json:"title"`
+	Link       string   `json:"link"`
+	Categories []string `json:"categories"`
 }
 
 type FeedMonitor struct {
@@ -28,7 +28,7 @@ func NewMonitor(feedUrls []string, refresh time.Duration) *FeedMonitor {
 		History:  make(map[string][]*gofeed.Item),
 		FeedUrls: feedUrls,
 		Refresh:  refresh,
-		Channel:  make(chan *Item, 2000),
+		Channel:  make(chan *Item, 100),
 		Parser:   gofeed.NewParser(),
 	}
 }
@@ -54,6 +54,7 @@ func (fm *FeedMonitor) processFeed(feedURL string) {
 
 	for _, item := range feed.Items {
 		if !fm.isNewArticle(item, feedURL) {
+			log.Printf("Skipping old item \n")
 			continue
 		}
 

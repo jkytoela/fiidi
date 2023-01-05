@@ -44,4 +44,6 @@ func main() {
 			log.Printf("Published item: %s\n", item.Link)
 		}
 	}
+
+	close(fm.Channel)
 }

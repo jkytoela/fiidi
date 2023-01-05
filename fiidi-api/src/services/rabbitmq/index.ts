@@ -1,8 +1,7 @@
 import { connect } from 'amqplib';
+import { amqpUrl } from '../../config/config';
 
-const defaultUrl = 'amqp://guest:guest@rabbitmq:5672';
-
-export async function getAmqpConnection(url: string = defaultUrl) {
-  const connection = await connect(url);
+export async function getAmqpConnection() {
+  const connection = await connect(amqpUrl);
   return connection;
 }

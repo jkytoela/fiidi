@@ -2,11 +2,10 @@ import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
-
+import * as middlewares from './util/middlewares';
 import { getDbConnection } from './services/database';
 import { getAmqpConnection } from './services/rabbitmq';
 import { consumeArticles } from './features/article/article.amqp';
-import * as middlewares from './middlewares';
 import articleRoutes from './features/article/article.routes';
 import categoryRoutes from './features/category/category.routes';
 
@@ -34,7 +33,7 @@ async function startApp() {
 
   app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`);
-    consumeArticles(amqpConnection);
+    consumeArticles(amqpConnection, db);
   });
 }
 
