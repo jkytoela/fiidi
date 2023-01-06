@@ -12,7 +12,6 @@ services:
 
   api:
     container_name: fiidi_api
-    image: node:latest
     build:
       context: fiidi-api
       dockerfile: Dockerfile
@@ -29,6 +28,14 @@ services:
     depends_on:
       - rabbitmq
       - fiididb
+
+  ui:
+    container_name: fiidi_ui
+    build:
+      context: fiidi-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
 
   fiididb:
     image: postgres:latest
