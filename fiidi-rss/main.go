@@ -16,11 +16,12 @@ func main() {
 		log.Fatalf("Failed to read config file: %v", err)
 	}
 
-	pub, err := publisher.NewPublisher("amqp://guest:guest@localhost:5672/", appConfig.QueueName)
+	pub, err := publisher.NewPublisher("amqp://guest:guest@rabbitmq:5672/", appConfig.QueueName)
 	if err != nil {
 		log.Fatalf("Failed to create publisher: %v", err)
 	}
 
+	log.Default().Printf("Connected to RabbitMQ")
 	defer pub.Conn.Close()
 	defer pub.Channel.Close()
 

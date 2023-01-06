@@ -9,6 +9,14 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  
+  fiidirss:
+    container_name: fiidi_rss
+    build:
+      context: fiidi-rss
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
 
   api:
     container_name: fiidi_api

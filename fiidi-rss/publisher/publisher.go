@@ -1,6 +1,7 @@
 package publisher
 
 import (
+	"log"
 	"time"
 
 	"github.com/rabbitmq/amqp091-go"
@@ -19,11 +20,12 @@ func NewPublisher(amqpURI, name string) (*Publisher, error) {
 	var err error
 
 	for i := 0; i < MaxAttempts; i++ {
+		log.Default().Printf("Connecting to RabbitMQ - Attempt %d/%d", i+1, MaxAttempts)
 		conn, err = amqp091.Dial(amqpURI)
 		if err == nil {
 			break
 		}
-		time.Sleep(time.Minute)
+		time.Sleep(15 * time.Second)
 	}
 
 	channel, err := conn.Channel()
