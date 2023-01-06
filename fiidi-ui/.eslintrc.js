@@ -26,6 +26,7 @@ module.exports = {
         'avoidEscape': true,
         'allowTemplateLiterals': true
       }
-    ]    
+    ],
+    'indent': ['error', 2],
   },
 };
