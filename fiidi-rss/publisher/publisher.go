@@ -1,8 +1,12 @@
 package publisher
 
 import (
+	"time"
+
 	"github.com/rabbitmq/amqp091-go"
 )
+
+const MaxAttempts = 5
 
 type Publisher struct {
 	Conn    *amqp091.Connection
@@ -11,9 +15,15 @@ type Publisher struct {
 }
 
 func NewPublisher(amqpURI, name string) (*Publisher, error) {
-	conn, err := amqp091.Dial(amqpURI)
-	if err != nil {
-		return nil, err
+	var conn *amqp091.Connection
+	var err error
+
+	for i := 0; i < MaxAttempts; i++ {
+		conn, err = amqp091.Dial(amqpURI)
+		if err == nil {
+			break
+		}
+		time.Sleep(time.Minute)
 	}
 
 	channel, err := conn.Channel()
