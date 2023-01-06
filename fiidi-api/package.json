@@ -6,6 +6,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "predev": "npm run migrate:latest",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "lint": "eslint --fix src test",

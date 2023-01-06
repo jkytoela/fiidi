@@ -17,6 +17,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - rabbitmq
+      - api
 
   api:
     container_name: fiidi_api
