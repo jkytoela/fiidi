@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const Root = () => (
-    <div>Index</div>
+    <div>Index2</div>
 );
 
 export default Root;

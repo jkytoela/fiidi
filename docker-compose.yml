@@ -45,6 +45,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    volumes:
+      - ./fiidi-ui/:/usr/src/app/
+      - ./usr/src/app/node_modules
 
   fiididb:
     image: postgres:latest
